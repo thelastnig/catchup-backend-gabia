@@ -8,10 +8,12 @@ const URLs = {
     bullpen: "http://mlbpark.donga.com/mp/b.php?p=1&m=list&b=bullpen&query=&select=&user=",
     ilbe: "https://www.ilbe.com",
     instiz: "https://www.instiz.net",
-    ruliweb: "https://bbs.ruliweb.com/best/humor/now",
+    ruliweb: "https://m.ruliweb.com",
     ppomppu: "https://www.ppomppu.co.kr",
     clien: "https://www.clien.net/service",
     namu: "https://namu.live",
+
+    boon: "https://1boon.kakao.com",
 }
 
 module.exports = URLs;

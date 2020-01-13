@@ -5,7 +5,6 @@ const cheerio = require('cheerio');
 const iconv = require('iconv-lite');
 const googleTrends = require('google-trends-api');
 
-
 // 네이버 검색어
 router.get('/naverKeyword', (req, res) => {
   
