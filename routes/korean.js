@@ -367,14 +367,24 @@ router.get('/boon', (req, res) => {
     const link_pre = 'https://1boon.kakao.com';
     
     $bodyList.each(function(i, elem) {
-      var title = $(this).clone().find('span').remove().end().text().replace(/\n/g, "").replace(/\[[\d]+\]/, "").trim();
+      const imageLinkRaw = $(this).find('img.img_thumb').attr('src');
+      console.log(imageLinkRaw)
+      const pattern = /S[0-9]+x[0-9]+/;
+      const matched = pattern.exec(imageLinkRaw);
+      var imageHeight = 400;
+      if (matched != null) {
+        tempHeight = /x[0-9]+/.exec(matched)[0].replace('x', '');
+        imageHeight = parseInt(tempHeight)
+      }
+      
       ulList[i] = {
         title: $(this).find('strong.tit_thumb').text().trim(),
-        link: link_pre + $(this).find('a').attr('href'),
-        imageLink: 'https:' + $(this).find('img.img_thumb').attr('src'),
+        link: link_pre + $(this).find('a.link_cont').attr('href'),
+        imageLink: 'https:' + imageLinkRaw,
+        imageHeight: imageHeight
       };
     });
-
+    
     const data = ulList.filter(n => n.title);
     return data;
   })
