@@ -76,26 +76,31 @@ router.get('/naverMainNews', (req, res) => {
 router.get('/naverEnterNews', (req, res) => {
 
   const url = URLs.naverEnterNews;
-  
-  getHtml(url)
-  .then(html => {
-    let ulList = [];
-    const $ = cheerio.load(html.data);
-    const $bodyList = $("div.rank_lst").children("ul").children("li");
-    const link_pre = 'https://m.entertain.naver.com/home';
 
+  const requestOptions = {
+    method: "GET",
+    url: url,
+    encoding: null
+  };
+
+  request(requestOptions, function(error, response, body){    
+    let ulList = [];
+    const $ = cheerio.load(iconv.decode(body, 'UTF-8'));
+    const $bodyList = $("div.rank_lst").children("ul").children("li").children("a");
+    const link_pre = 'https://m.entertain.naver.com/home';   
+    
     $bodyList.each(function(i, elem) {
       ulList[i] = {
-          title: $(this).find('a').text(),
-          link: link_pre + $(this).find('a').attr('href')
+          title: $(this).find('span').remove().end().text(),
+          link: link_pre + $(this).attr('href')
       };
     });
 
     const data = ulList.filter(n => n.title);
-    return data;
+
+    res.send({status: 'success', data: data})
 
   })
-  .then(response => res.send({status: 'success', data: response}) );
 });
 
 
@@ -121,7 +126,7 @@ router.get('/naverSportsNews', (req, res) => {
     const data = ulList.filter(n => n.title);
     return data;
   })
-  .then(response => res.send({status: 'success', data: response}) );
+  .then(response => res.send({status: 'success', data: response}));
 });
 
 
@@ -153,7 +158,7 @@ router.get('/82cook', (req, res) => {
     const data = ulList.filter(n => n.title);
     return data;
   })
-  .then(response => res.send({status: 'success', data: response}) );
+  .then(response => res.send({status: 'success', data: response}));
 });
 
 
@@ -178,7 +183,7 @@ router.get('/bullpen', (req, res) => {
     const data = ulList.filter(n => n.title);
     return data;
   })
-  .then(response => res.send({status: 'success', data: response}) );
+  .then(response => res.send({status: 'success', data: response}));
 });
 
 
@@ -205,7 +210,7 @@ router.get('/ilbe', (req, res) => {
     return data;
     
   })
-  .then(response => res.send({status: 'success', data: response}) );
+  .then(response => res.send({status: 'success', data: response}));
 });
 
 
@@ -232,7 +237,7 @@ router.get('/instiz', (req, res) => {
     return data;
     
   })
-  .then(response => res.send({status: 'success', data: response}) );
+  .then(response => res.send({status: 'success', data: response}));
 });
 
 
@@ -258,7 +263,7 @@ router.get('/ruliweb', (req, res) => {
     return data;
     
   })
-  .then(response => res.send({status: 'success', data: response}) );
+  .then(response => res.send({status: 'success', data: response}));
 });
 
 
@@ -285,7 +290,7 @@ router.get('/clien', (req, res) => {
     return data;
     
   })
-  .then(response => res.send({status: 'success', data: response}) );
+  .then(response => res.send({status: 'success', data: response}));
 });
 
 
@@ -314,7 +319,7 @@ router.get('/namu', (req, res) => {
     
     
   })
-  .then(response => res.send({status: 'success', data: response}) );
+  .then(response => res.send({status: 'success', data: response}));
 });
 
 
@@ -344,7 +349,7 @@ router.get('/ppomppu', (req, res) => {
 
     const data = ulList.filter(n => n.title);
 
-    res.send({status: 'success', data: data})
+    res.send({status: 'success', data: data});
   })
 });
 
@@ -388,7 +393,7 @@ router.get('/boon', (req, res) => {
     const data = ulList.filter(n => n.title);
     return data;
   })
-  .then(response => res.send({status: 'success', data: response}) );
+  .then(response => res.send({status: 'success', data: response}));
 
 });
 
