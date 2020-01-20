@@ -1,7 +1,7 @@
 const URLs = {
     naverKeyword: "https://datalab.naver.com/keyword/realtimeList.naver?where=main",
     naverMainNews: "https://news.naver.com/main/ranking/popularDay.nhn",
-    naverEnterNews: "https://entertain.naver.com/home",
+    naverEnterNews: "https://m.entertain.naver.com/ranking",
     naverSportsNews: "https://sports.news.naver.com/index.nhn",
 
     cook: "https://www.82cook.com",
@@ -12,6 +12,7 @@ const URLs = {
     ppomppu: "https://www.ppomppu.co.kr",
     clien: "https://www.clien.net/service",
     namu: "https://namu.live",
+    nate: "https://m.pann.nate.com/talk/talker",
 
     boon: "https://1boon.kakao.com",
 }

@@ -86,13 +86,15 @@ router.get('/naverEnterNews', (req, res) => {
   request(requestOptions, function(error, response, body){    
     let ulList = [];
     const $ = cheerio.load(iconv.decode(body, 'UTF-8'));
-    const $bodyList = $("div.rank_lst").children("ul").children("li").children("a");
-    const link_pre = 'https://m.entertain.naver.com/home';   
+    const $bodyList = $("div.com_ranking").children("ul").children("li").children("a");
     
     $bodyList.each(function(i, elem) {
+      if (i >= 10) {
+        return false
+      }
       ulList[i] = {
-          title: $(this).find('span').remove().end().text(),
-          link: link_pre + $(this).attr('href')
+          title: $(this).find('p.tx').text(),
+          link: $(this).attr('href')
       };
     });
 
@@ -253,6 +255,9 @@ router.get('/ruliweb', (req, res) => {
     const $bodyList = $("div.m_hit_article_2").children("div.widget_bottom").children("ul.bottom_list").children("li").children("a");
     
     $bodyList.each(function(i, elem) {
+      if (i >= 10) {
+        return false
+      }
       ulList[i] = {
           title: $(this).find('span').remove().end().text().replace(/[\n\t]/g, "").trim(),
           link: 'https:' + $(this).attr('href')
@@ -280,6 +285,9 @@ router.get('/clien', (req, res) => {
     const link_pre = 'https://www.clien.net';
     
     $bodyList.each(function(i, elem) {
+      if (i >= 10) {
+        return false
+      }
       ulList[i] = {
           title: $(this).find('span.subject').text(),
           link: link_pre + $(this).find('a.list_subject').attr('href')
@@ -351,6 +359,34 @@ router.get('/ppomppu', (req, res) => {
 
     res.send({status: 'success', data: data});
   })
+});
+
+
+// 네이트판 
+router.get('/nate', (req, res) => {
+
+  const url = URLs.nate;
+  
+  getHtml(url)
+  .then(html => {
+    let ulList = [];
+    const $ = cheerio.load(html.data);
+    const $bodyList = $("div.talkRanking").children("ol").children("li").children("a");
+    const link_pre = 'https://m.pann.nate.com';
+    
+    $bodyList.each(function(i, elem) {
+      ulList[i] = {
+          title: $(this).find("span.tit").text(),
+          link: link_pre + $(this).attr('href')
+      };
+    });
+
+    const data = ulList.filter(n => n.title);
+    return data;
+    
+    
+  })
+  .then(response => res.send({status: 'success', data: response}));
 });
 
 
