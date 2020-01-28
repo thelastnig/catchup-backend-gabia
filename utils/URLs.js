@@ -14,7 +14,7 @@ const URLs = {
     namu: "https://namu.live",
     nate: "https://m.pann.nate.com/talk/talker",
 
-    boon: "https://1boon.kakao.com",
+    boon: "https://1boon.kakao.com/p/view",
 }
 
 module.exports = URLs;

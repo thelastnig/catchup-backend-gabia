@@ -404,7 +404,7 @@ router.get('/boon', (req, res) => {
   .then(html => {
     let ulList = [];
     const $ = cheerio.load(html.data);
-    const $bodyList = $("ul.list_home").children("li"); 
+    const $bodyList = $("ol.list_classify").children("li"); 
     const link_pre = 'https://1boon.kakao.com';
     
     $bodyList.each(function(i, elem) {
@@ -420,7 +420,7 @@ router.get('/boon', (req, res) => {
       
       ulList[i] = {
         title: $(this).find('strong.tit_thumb').text().trim(),
-        link: link_pre + $(this).find('a.link_cont').attr('href'),
+        link: link_pre + $(this).find('a.link_classify').attr('href'),
         imageLink: 'https:' + imageLinkRaw,
         imageHeight: imageHeight
       };
