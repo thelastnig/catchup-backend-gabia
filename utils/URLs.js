@@ -13,8 +13,10 @@ const URLs = {
     clien: "https://www.clien.net/service",
     namu: "https://namu.live",
     nate: "https://m.pann.nate.com/talk/talker",
+    fm: "https://www.fmkorea.com",
 
-    boon: "https://1boon.kakao.com/p/view",
+    boon: "https://1boon.kakao.com/p/popular",
+    boonv: "https://1boon.kakao.com/p/view",
 }
 
 module.exports = URLs;

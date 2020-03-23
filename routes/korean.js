@@ -24,7 +24,7 @@ router.get('/naverKeyword', (req, res) => {
   .then(html => {
     let ulList = [];
     const $ = cheerio.load(html.data);
-    const $bodyList = $("div.ranking_box").children("ul.ranking_list").children("li");
+    const $bodyList = $("div.ranking_box").children("div.list_group").children("ul.ranking_list").children("li");
 
     $bodyList.each(function(i, elem) {
       ulList[i] = {
@@ -225,7 +225,7 @@ router.get('/instiz', (req, res) => {
   .then(html => {
     let ulList = [];
     const $ = cheerio.load(html.data);
-    const $bodyList = $("div.index_block_all").eq(9).children("div.index_block_list");
+    const $bodyList = $("div.index_block_all").eq(10).children("div.index_block_list");
     const link_pre = 'https://www.instiz.net/';
 
     $bodyList.each(function(i, elem) {
@@ -285,7 +285,7 @@ router.get('/clien', (req, res) => {
     const link_pre = 'https://www.clien.net';
     
     $bodyList.each(function(i, elem) {
-      if (i >= 10) {
+      if (i >= 20) {
         return false
       }
       ulList[i] = {
@@ -345,13 +345,12 @@ router.get('/ppomppu', (req, res) => {
   request(requestOptions, function(error, response, body){    
     let ulList = [];
     const $ = cheerio.load(iconv.decode(body, 'EUC-KR'));
-    const $bodyList = $("div.hot-post-list").children("ul:first-child").children("li"); 
+    const $bodyList = $('#hot-post-list').children("ul:first-child").children("li"); 
     const link_pre = 'https://www.ppomppu.co.kr';
-    
     $bodyList.each(function(i, elem) {
       ulList[i] = {
-        title: $(this).find('a.title ').text().trim(),
-        link: link_pre + $(this).find('a.title ').attr('href')
+        title: $(this).find('a.title').text().trim(),
+        link: link_pre + $(this).find('a.title').attr('href')
       };
     });
 
@@ -390,6 +389,37 @@ router.get('/nate', (req, res) => {
 });
 
 
+// fmkorea 
+router.get('/fm', (req, res) => {
+
+  const url = URLs.fm;
+  
+  getHtml(url)
+  .then(html => {
+    let ulList = [];
+    const $ = cheerio.load(html.data);
+    const $bodyList = $("div.fm_best_widget._bd_pc").children("ul").children("li").children("div").children("h3").children("a");
+    const link_pre = 'https://m.fmkorea.com';
+    
+    $bodyList.each(function(i, elem) {
+      tempArray = $(this).text().trim().split(" ");
+      temp = tempArray.pop();
+      title = tempArray.join(" ");
+      ulList[i] = {
+          title: title,
+          link: link_pre + $(this).attr('href')
+      };
+    });
+
+    const data = ulList.filter(n => n.title);
+    return data;
+    
+    
+  })
+  .then(response => res.send({status: 'success', data: response}));
+});
+
+
 
 
 ////////////////////////////////////////////////////////////////////////
@@ -409,7 +439,42 @@ router.get('/boon', (req, res) => {
     
     $bodyList.each(function(i, elem) {
       const imageLinkRaw = $(this).find('img.img_thumb').attr('src');
-      console.log(imageLinkRaw)
+      const pattern = /S[0-9]+x[0-9]+/;
+      const matched = pattern.exec(imageLinkRaw);
+      var imageHeight = 400;
+      if (matched != null) {
+        tempHeight = /x[0-9]+/.exec(matched)[0].replace('x', '');
+        imageHeight = parseInt(tempHeight)
+      }
+      
+      ulList[i] = {
+        title: $(this).find('strong.tit_thumb').text().trim(),
+        link: link_pre + $(this).find('a.link_classify').attr('href'),
+        imageLink: 'https:' + imageLinkRaw,
+        imageHeight: imageHeight
+      };
+    });
+    
+    const data = ulList.filter(n => n.title);
+    return data;
+  })
+  .then(response => res.send({status: 'success', data: response}));
+
+});
+
+router.get('/boonv', (req, res) => {
+
+  const url = URLs.boonv;
+  
+  getHtml(url)
+  .then(html => {
+    let ulList = [];
+    const $ = cheerio.load(html.data);
+    const $bodyList = $("ol.list_classify").children("li"); 
+    const link_pre = 'https://1boon.kakao.com';
+    
+    $bodyList.each(function(i, elem) {
+      const imageLinkRaw = $(this).find('img.img_thumb').attr('src');
       const pattern = /S[0-9]+x[0-9]+/;
       const matched = pattern.exec(imageLinkRaw);
       var imageHeight = 400;
