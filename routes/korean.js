@@ -115,12 +115,12 @@ router.get('/naverSportsNews', (req, res) => {
   .then(html => {
     let ulList = [];
     const $ = cheerio.load(html.data);
-    const $bodyList = $("#mostViewedNewsList").children("li");
+    const $bodyList = $("ul.aside_news_list").children("li");
     const link_pre = 'https://sports.news.naver.com';
 
     $bodyList.each(function(i, elem) {
       ulList[i] = {
-          title: $(this).find('a').attr('title'),
+          title: $(this).text().trim(),
           link: link_pre + $(this).find('a').attr('href')
       };
     });
