@@ -17,6 +17,10 @@ const URLs = {
 
     boon: "https://1boon.kakao.com/p/popular",
     boonv: "https://1boon.kakao.com/p/view",
+
+    // 한국의 Yahoo earth ID: 23424868
+    twitter: "https://api.twitter.com/1.1/trends/place.json?id=23424868"
+    // twitter: "https://api.twitter.com/1.1/trends/place.json?id=23424977"
 }
 
 module.exports = URLs;

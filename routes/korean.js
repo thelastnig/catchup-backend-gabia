@@ -6,6 +6,7 @@ const getHtml = require('../utils/getHTML');
 const URLs = require('../utils/URLs');
 const iconv = require('iconv-lite');
 const request = require('request');
+const OAuth = require('oauth');
 
 // 인코딩 변환
 //const Iconv = require('iconv').Iconv;
@@ -129,6 +130,40 @@ router.get('/naverSportsNews', (req, res) => {
     return data;
   })
   .then(response => res.send({status: 'success', data: response}));
+});
+
+
+// 트위터 트렌드
+router.get('/twitter', (req, res) => {
+
+
+  const response = res;
+  const url = URLs.twitter;
+
+  const oauth = new OAuth.OAuth(
+    'https://api.twitter.com/oauth/request_token',
+    'https://api.twitter.com/oauth/access_token',
+    '1GaRWPa7C81lTh05iQMKmo7PD',
+    'UG9hhfwq6gEclsdwGYbQNZjoQS5Pznr6H7NFCmDjs0CbbCXwIP',
+    '1.0A',
+    null,
+    'HMAC-SHA1'
+  );
+
+  oauth.get(
+    url,
+    '1262599933846118401-Oq8W7NTvcC7V4Cnhua9iBh8M9l21CF', //test user token
+    'gr7lnz4TYZ782bbwPGya32SmSLoejX8GZ6cBg5RlqATJh', //test user secret            
+    function (e, data, res) {
+      if (e) {
+        console.error(e);
+      } 
+      // const rawData = require('util').inspect(data);
+      const rawData = JSON.parse(data);
+      console.log(rawData);
+      response.send({status: 'success', data: rawData});
+    }
+  )
 });
 
 
@@ -498,5 +533,14 @@ router.get('/boonv', (req, res) => {
 
 });
 
+
+
+
+
 module.exports = router;
+
+
+
+
+
 
