@@ -159,9 +159,36 @@ router.get('/twitter', (req, res) => {
         console.error(e);
       } 
       // const rawData = require('util').inspect(data);
+
+      let sendTrendList = []
       const rawData = JSON.parse(data);
-      console.log(rawData);
-      response.send({status: 'success', data: rawData});
+      const trendRawList = rawData[0]["trends"];
+      trendRawList.map((trend, index) => {
+        if (index > 11) {
+          return
+        } 
+        let name = "";
+
+        if (trend.name.length > 0 && trend.name.substring(0, 1) == "#") {
+          name = trend.name.substring(1, trend.name.length)
+        } else {
+          name = trend.name
+        }
+        if (name.length > 9) {
+          name = name.substring(0, 9) + "..."
+        }
+        const trendDict = {
+          "name": name, 
+          "url": trend.url,
+          "color": index < 5 ? true : false
+        };
+        sendTrendList.push(trendDict);
+      })
+
+      sendTrendList.sort(() => Math.random() - Math.random())
+
+      
+      response.send({status: 'success', data: sendTrendList});
     }
   )
 });
