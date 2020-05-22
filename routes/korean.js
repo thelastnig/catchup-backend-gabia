@@ -175,7 +175,7 @@ router.get('/twitter', (req, res) => {
           name = trend.name
         }
         if (name.length > 9) {
-          name = name.substring(0, 9) + "..."
+          name = name.substring(0, 9) + "...";
         }
         const trendDict = {
           "name": name, 
@@ -183,12 +183,129 @@ router.get('/twitter', (req, res) => {
           "color": index < 5 ? true : false
         };
         sendTrendList.push(trendDict);
-      })
+      });      
 
-      sendTrendList.sort(() => Math.random() - Math.random())
+      const lastItem1 = sendTrendList.pop();
+      const lastItem2 = sendTrendList.pop();
 
+      sendTrendList.sort(() => Math.random() - Math.random());
+
+      let firstList = new Array();
+      let secondList = new Array();
+      let thirdList = new Array();
+      let fourthList = new Array();
+      let fifthList = new Array();
+      let itemLength = [0, 0, 0, 0, 0];
+
+      sendTrendList.map((trend, index) => {
+        const tempIndex = index >= 5 ? index - 5 : index;
+        itemLength[tempIndex] += trend.name.length;
+        if (tempIndex == 0) {
+          firstList.push(trend);
+        } else if (tempIndex == 1) {
+          secondList.push(trend);
+        } else if (tempIndex == 2) {
+          thirdList.push(trend);
+        } else if (tempIndex == 3) {
+          fourthList.push(trend);     
+        } else {
+          fifthList.push(trend);     
+        }
+
+      });
+
+      const firstMin = Math.min.apply(null, itemLength);
+      if (firstMin <= 10) {
+        const firstIndex = itemLength.indexOf(firstMin);
+        if (firstIndex == 0) {
+          firstList.push(lastItem1);
+        } else if (firstIndex == 1) {
+          secondList.push(lastItem1);
+        } else if (firstIndex == 2) {
+          thirdList.push(lastItem1);
+        } else if (firstIndex == 3) {
+          fourthList.push(lastItem1);     
+        } else {
+          fifthList.push(lastItem1);     
+        }
+
+        itemLength[firstIndex] += 100;
+        const secondMin = Math.min.apply(null, itemLength);
+        const secondIndex = itemLength.indexOf(secondMin);
+        if (secondMin <= 10) {        
+          if (secondIndex == 0) {
+            firstList.push(lastItem2);
+          } else if (secondIndex == 1) {
+            secondList.push(lastItem2);
+          } else if (secondIndex == 2) {
+            thirdList.push(lastItem2);
+          } else if (secondIndex == 3) {
+            fourthList.push(lastItem2);     
+          } else {
+            fifthList.push(lastItem2);     
+          }
+        } else if (secondMin <= 14) {
+          if (lastItem2.name.length <= 7) {
+            if (secondIndex == 0) {
+              firstList.push(lastItem2);
+            } else if (secondIndex == 1) {
+              secondList.push(lastItem2);
+            } else if (secondIndex == 2) {
+              thirdList.push(lastItem2);
+            } else if (secondIndex == 3) {
+              fourthList.push(lastItem2);     
+            } else {
+              fifthList.push(lastItem2);     
+            }
+          }
+        }
+      } else if (firstMin <= 14) {
+        if (lastItem1.name.length <= 7) {
+          if (firstIndex == 0) {
+            firstList.push(lastItem1);
+          } else if (firstIndex == 1) {
+            secondList.push(lastItem1);
+          } else if (firstIndex == 2) {
+            thirdList.push(lastItem1);
+          } else if (firstIndex == 3) {
+            fourthList.push(lastItem1);     
+          } else {
+            fifthList.push(lastItem1);     
+          }        
+          
+          itemLength[firstIndex] += 100;
+          const secondMin = Math.min.apply(null, itemLength);
+          const secondIndex = itemLength.indexOf(secondMin);
+  
+          if (secondMin <= 14 && lastItem2.name.length <= 7) {
+            if (secondIndex == 0) {
+              firstList.push(lastItem2);
+            } else if (secondIndex == 1) {
+              secondList.push(lastItem2);
+            } else if (secondIndex == 2) {
+              thirdList.push(lastItem2);
+            } else if (secondIndex == 3) {
+              fourthList.push(lastItem2);     
+            } else {
+              fifthList.push(lastItem2);     
+            }
+          }
+        } else if (lastItem2.name.length <= 7) {
+          if (firstIndex == 0) {
+            firstList.push(lastItem2);
+          } else if (firstIndex == 1) {
+            secondList.push(lastItem2);
+          } else if (firstIndex == 2) {
+            thirdList.push(lastItem2);
+          } else if (firstIndex == 3) {
+            fourthList.push(lastItem2);     
+          } else {
+            fifthList.push(lastItem2);     
+          }
+        }
+      }
       
-      response.send({status: 'success', data: sendTrendList});
+      response.send({status: 'success', data: [firstList, secondList, thirdList, fourthList, fifthList]});
     }
   )
 });
