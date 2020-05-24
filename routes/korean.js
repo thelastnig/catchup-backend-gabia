@@ -136,7 +136,6 @@ router.get('/naverSportsNews', (req, res) => {
 // 트위터 트렌드
 router.get('/twitter', (req, res) => {
 
-
   const response = res;
   const url = URLs.twitter;
 
@@ -180,7 +179,8 @@ router.get('/twitter', (req, res) => {
         const trendDict = {
           "name": name, 
           "url": trend.url,
-          "color": index < 5 ? true : false
+          "color": index < 5 ? true : false,
+          "colorIdx": index < 5 ? index : 909,
         };
         sendTrendList.push(trendDict);
       });      
@@ -188,7 +188,7 @@ router.get('/twitter', (req, res) => {
       const lastItem1 = sendTrendList.pop();
       const lastItem2 = sendTrendList.pop();
 
-      sendTrendList.sort(() => Math.random() - Math.random());
+      sendTrendList = sendTrendList.sort(() => Math.random() - Math.random());
 
       let firstList = new Array();
       let secondList = new Array();
