@@ -159,6 +159,10 @@ router.get('/twitter', (req, res) => {
       } 
       // const rawData = require('util').inspect(data);
 
+      const maxLetterLength = 11
+      const maxReLength = 7
+      const maxLength = 22
+
       let sendTrendList = []
       const rawData = JSON.parse(data);
       const trendRawList = rawData[0]["trends"];
@@ -173,8 +177,8 @@ router.get('/twitter', (req, res) => {
         } else {
           name = trend.name
         }
-        if (name.length > 9) {
-          name = name.substring(0, 9) + "...";
+        if (name.length > maxLetterLength) {
+          name = name.substring(0, maxLetterLength) + "...";
         }
         const trendDict = {
           "name": name, 
@@ -187,8 +191,6 @@ router.get('/twitter', (req, res) => {
 
       const lastItem1 = sendTrendList.pop();
       const lastItem2 = sendTrendList.pop();
-
-      sendTrendList = sendTrendList.sort(() => Math.random() - Math.random());
 
       let firstList = new Array();
       let secondList = new Array();
@@ -211,11 +213,10 @@ router.get('/twitter', (req, res) => {
         } else {
           fifthList.push(trend);     
         }
-
       });
 
       const firstMin = Math.min.apply(null, itemLength);
-      if (firstMin <= 10) {
+      if (firstMin <= maxLetterLength) {
         const firstIndex = itemLength.indexOf(firstMin);
         if (firstIndex == 0) {
           firstList.push(lastItem1);
@@ -232,7 +233,7 @@ router.get('/twitter', (req, res) => {
         itemLength[firstIndex] += 100;
         const secondMin = Math.min.apply(null, itemLength);
         const secondIndex = itemLength.indexOf(secondMin);
-        if (secondMin <= 10) {        
+        if (secondMin <= maxLetterLength) {        
           if (secondIndex == 0) {
             firstList.push(lastItem2);
           } else if (secondIndex == 1) {
@@ -244,8 +245,8 @@ router.get('/twitter', (req, res) => {
           } else {
             fifthList.push(lastItem2);     
           }
-        } else if (secondMin <= 14) {
-          if (lastItem2.name.length <= 7) {
+        } else if (secondMin <= (maxLength - maxReLength)) {
+          if (lastItem2.name.length <= maxReLength) {
             if (secondIndex == 0) {
               firstList.push(lastItem2);
             } else if (secondIndex == 1) {
@@ -259,8 +260,8 @@ router.get('/twitter', (req, res) => {
             }
           }
         }
-      } else if (firstMin <= 14) {
-        if (lastItem1.name.length <= 7) {
+      } else if (firstMin <= (maxLength - maxReLength)) {
+        if (lastItem1.name.length <= maxReLength) {
           if (firstIndex == 0) {
             firstList.push(lastItem1);
           } else if (firstIndex == 1) {
@@ -277,7 +278,7 @@ router.get('/twitter', (req, res) => {
           const secondMin = Math.min.apply(null, itemLength);
           const secondIndex = itemLength.indexOf(secondMin);
   
-          if (secondMin <= 14 && lastItem2.name.length <= 7) {
+          if (secondMin <= (maxLength - maxReLength) && lastItem2.name.length <= maxReLength) {
             if (secondIndex == 0) {
               firstList.push(lastItem2);
             } else if (secondIndex == 1) {
@@ -290,7 +291,7 @@ router.get('/twitter', (req, res) => {
               fifthList.push(lastItem2);     
             }
           }
-        } else if (lastItem2.name.length <= 7) {
+        } else if (lastItem2.name.length <= maxReLength) {
           if (firstIndex == 0) {
             firstList.push(lastItem2);
           } else if (firstIndex == 1) {
