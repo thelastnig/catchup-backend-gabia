@@ -14,6 +14,7 @@ const URLs = {
     namu: "https://namu.live",
     nate: "https://m.pann.nate.com/talk/talker",
     fm: "https://www.fmkorea.com",
+    theqoo: "https://theqoo.net/hot?filter_mode=normal",
 
     boon: "https://1boon.kakao.com/p/popular",
     boonv: "https://1boon.kakao.com/p/view",

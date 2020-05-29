@@ -405,13 +405,12 @@ router.get('/instiz', (req, res) => {
   .then(html => {
     let ulList = [];
     const $ = cheerio.load(html.data);
-    const $bodyList = $("div.index_block_all").eq(10).children("div.index_block_list");
+    const $bodyList = $("img[style='margin:0 5px 0 0;width:13px;vertical-align:-3px;']").parent()
     const link_pre = 'https://www.instiz.net/';
-
     $bodyList.each(function(i, elem) {
       ulList[i] = {
-          title: $(this).find('span').remove().end().text(),
-          link: link_pre + $(this).find('a').attr('href')
+          title: $(this).find('span').remove().end().text().trim(),
+          link: link_pre + $(this).attr('href')
       };
     });
 
@@ -588,6 +587,41 @@ router.get('/fm', (req, res) => {
       ulList[i] = {
           title: title,
           link: link_pre + $(this).attr('href')
+      };
+    });
+
+    const data = ulList.filter(n => n.title);
+    return data;
+    
+    
+  })
+  .then(response => res.send({status: 'success', data: response}));
+});
+
+
+// theqoo 
+router.get('/theqoo', (req, res) => {
+
+  const url = URLs.theqoo;
+  
+  getHtml(url)
+  .then(html => {
+    let ulList = [];
+    const $ = cheerio.load(html.data);
+    const $bodyList = $('a').filter(function() {
+      return $(this).text().trim() === '스퀘어';
+    }).parent().next();
+    const link_pre = 'https://theqoo.net';
+    
+    $bodyList.each(function(i, elem) {
+      if (i === 0) {
+        return true;
+      } else if (i >= 21) {
+        return false;
+      }
+      ulList[i] = {
+          title: $(this).find('a').eq(0).text().trim(),
+          link: link_pre + $(this).find('a').eq(0).attr('href')
       };
     });
 
