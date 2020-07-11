@@ -431,15 +431,19 @@ router.get('/ruliweb', (req, res) => {
   .then(html => {
     let ulList = [];
     const $ = cheerio.load(html.data);
-    const $bodyList = $("div.m_hit_article_2").children("div.widget_bottom").children("ul.bottom_list").children("li").children("a");
+    const $bodyList = $("div.hit_article_2").children("div.widget_bottom").children("ul.bottom_list").children("li").children("a");
     
     $bodyList.each(function(i, elem) {
       if (i >= 10) {
         return false
       }
+      title = $(this).find('span').remove().end().text().replace(/[\n\t]/g, "").trim();
+      editedTitle = title.substring(4).trim();
+      link = 'https:' + $(this).attr('href');
+      editedLink = link.replace("bbs.", "m.");
       ulList[i] = {
-          title: $(this).find('span').remove().end().text().replace(/[\n\t]/g, "").trim(),
-          link: 'https:' + $(this).attr('href')
+          title: editedTitle,
+          link: editedLink
       };
     });
 
@@ -490,7 +494,7 @@ router.get('/namu', (req, res) => {
   .then(html => {
     let ulList = [];
     const $ = cheerio.load(html.data);
-    const $bodyList = $("div.link-list").eq(3).children("a");
+    const $bodyList = $("div.link-list").eq(4).children("a");
     const link_pre = 'https://namu.live';
     
     $bodyList.each(function(i, elem) {

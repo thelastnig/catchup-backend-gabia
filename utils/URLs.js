@@ -8,7 +8,7 @@ const URLs = {
     bullpen: "http://mlbpark.donga.com/mp/b.php?p=1&m=list&b=bullpen&query=&select=&user=",
     ilbe: "https://www.ilbe.com",
     instiz: "https://www.instiz.net",
-    ruliweb: "https://m.ruliweb.com",
+    ruliweb: "https://www.ruliweb.com",
     ppomppu: "https://www.ppomppu.co.kr",
     clien: "https://www.clien.net/service",
     namu: "https://namu.live",
